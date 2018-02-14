@@ -41,6 +41,40 @@ public class LinkedList {
 
     public int insert(String name, int priority) {
 
+        // check if full
+        if(isFull()) return -1;
+
+
+        Node currNode = new Node(name, priority);
+
+        // check if empty
+        if(isEmpty()) {
+
+            start = currNode;
+            end = start;
+            return 0;
+
+        } else {
+
+            if(currNode.getPriority() < start.getPriority()) {
+
+                currNode.setNext(start);
+                start.setPrev(currNode);
+                start = currNode;
+            }
+
+            if(currNode.getPriority() > start.getPriority()) {
+
+//                int targetIndex = findTargetIndex()
+            }
+        }
+
         return 1;
     }
+
+    void insertStart(){}
+
+    void insertEnd(){}
+
+    void insert
 }
