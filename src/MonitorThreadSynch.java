@@ -3,15 +3,26 @@
  * 
  */
 
+import java.util.concurrent.Semaphore;
+
 public class MonitorThreadSynch {
+
+	Semaphore semaphore;
+	int parties;
 	
 	public MonitorThreadSynch(int parties) {
+
+		this.semaphore = new Semaphore(0);
+		this.parties = parties;
 	}
 	
 	public int await() throws InterruptedException {
-           int index = 0;
-		
-          // you need to write this code
-	    return index;
+
+		synchronized(this) {
+
+
+		}
+
+		return 1;
 	}
 }
