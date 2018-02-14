@@ -76,5 +76,5 @@ public class LinkedList {
 
     void insertEnd(){}
 
-    void insert
+//    void insert
 }

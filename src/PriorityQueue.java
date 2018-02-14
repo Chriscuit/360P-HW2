@@ -16,6 +16,10 @@ public class PriorityQueue {
 
 		int result = linkedList.insert(name, priority);
 
+//		while(!isFull){
+//			wait();
+//		}
+
 		return result;
 	}
 
