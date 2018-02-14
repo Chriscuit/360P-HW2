@@ -7,22 +7,26 @@ import java.util.concurrent.Semaphore;
 
 public class MonitorThreadSynch {
 
-	Semaphore semaphore;
 	int parties;
+	int index;
 	
 	public MonitorThreadSynch(int parties) {
 
-		this.semaphore = new Semaphore(0);
 		this.parties = parties;
+		this.index = 0;
 	}
 	
-	public int await() throws InterruptedException {
+	public synchronized int await() throws InterruptedException {
 
-		synchronized(this) {
+		index += 1;
 
-
+		if (index == parties) {
+			index = 0;
+			notifyAll();
 		}
 
-		return 1;
+		else wait();
+
+		return index;
 	}
 }
