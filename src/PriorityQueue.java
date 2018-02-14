@@ -8,7 +8,7 @@ public class PriorityQueue {
 		this.linkedList = new LinkedList(maxSize);
 	}
 
-	public int add(String name, int priority) {
+	public int add(String name, int priority) throws InterruptedException {
         // Adds the name with its priority to this queue.
         // Returns the current position in the list where the name was inserted;
         // otherwise, returns -1 if the name is already present in the list.
@@ -16,9 +16,9 @@ public class PriorityQueue {
 
 		int result = linkedList.insert(name, priority);
 
-//		while(!isFull){
-//			wait();
-//		}
+		while(linkedList.isFull()){
+			Thread.currentThread().wait();
+		}
 
 		return result;
 	}
@@ -29,9 +29,14 @@ public class PriorityQueue {
 		return 1;
 	}
 
-	public String getFirst() {
+	public String getFirst() throws InterruptedException {
         // Retrieves and removes the name with the highest priority in the list,
         // or blocks the thread if the list is empty.
+
+		while(linkedList.isEmpty()){
+			Thread.currentThread().wait();
+		}
+
 		return "";
 	}
 }

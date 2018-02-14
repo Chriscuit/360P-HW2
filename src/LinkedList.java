@@ -18,7 +18,7 @@ public class LinkedList {
         this.maxSize = maxSize;
     }
 
-    private Boolean isFull() {
+    public Boolean isFull() {
 
         if(this.size == maxSize) {
             return true;
@@ -54,27 +54,36 @@ public class LinkedList {
             end = start;
             return 0;
 
+        } else if(start.getPriority() > currNode.getPriority()) {
+
+            currNode.setNext(start);
+            start.setPrev(currNode);
+            end = start;
+            start = currNode;
+
+        } else if(end.getPriority() > currNode.getPriority()) {
+
+            currNode.setPrev(end);
+            end.setNext(currNode);
+            end = currNode;
+
         } else {
 
-            if(currNode.getPriority() < start.getPriority()) {
+            Node viewNode = start;
 
-                currNode.setNext(start);
-                start.setPrev(currNode);
-                start = currNode;
-            }
+            while(viewNode.getNext() != null) {
 
-            if(currNode.getPriority() > start.getPriority()) {
+                if(viewNode.getNext().getPriority() < currNode.getPriority()){
 
-//                int targetIndex = findTargetIndex()
+                    viewNode = viewNode.getNext();
+                } else {
+
+
+                }
             }
         }
 
+
         return 1;
     }
-
-    void insertStart(){}
-
-    void insertEnd(){}
-
-//    void insert
 }
