@@ -1,10 +1,11 @@
-
 public class PriorityQueue {
+
+	LinkedList linkedList;
 
 	public PriorityQueue(int maxSize) {
         // Creates a Priority queue with maximum allowed size as capacity
 
-
+		this.linkedList = new LinkedList(maxSize);
 	}
 
 	public int add(String name, int priority) {
@@ -13,7 +14,9 @@ public class PriorityQueue {
         // otherwise, returns -1 if the name is already present in the list.
         // This method blocks when the list is full.
 
-		return 1;
+		int result = linkedList.insert(name, priority);
+
+		return result;
 	}
 
 	public int search(String name) {

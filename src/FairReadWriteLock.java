@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.ReentrantLock;
 
 /*
 	I'm pretty sure this is very wrong but rough idea is to keep track of
@@ -49,7 +48,7 @@ public class FairReadWriteLock {
 	public synchronized void beginWrite() throws InterruptedException {
 
 		writeRequests++;
-		while(writers > 0 || writeRequests > 0 || readers > 0) {
+		while(writers > 0 || readers > 0) {
 			wait();
 		}
 		writers++;
