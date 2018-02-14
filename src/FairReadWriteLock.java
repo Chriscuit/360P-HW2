@@ -26,49 +26,41 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 
 public class FairReadWriteLock {
-	private final ReentrantLock lock = new ReentrantLock();
-	private final Condition writerExists = lock.newCondition();
-	private final Condition readerExists = lock.newCondition();
-	private ArrayList<Integer> writerList = new ArrayList<Integer>();		// keeps track of # of writers
-	private ArrayList<Integer> readerList = new ArrayList<Integer>();		//  keeps track of # of readers
-	private int numThread = 0;												// keeps track of numThreads in general
-                        
-	public synchronized void beginRead() {
-		lock.lock();
 
-		try {
-			numThread++;
-			readerList.add(numThread);
-			while(!writerList.isEmpty() && writerList.get(0) < readerList.get(readerList.size() - 1)) {
-				writerExists.await();
-			}
-			if(!readerList.isEmpty()) {
-				readerExists.await();
-			}
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} finally {
-			lock.unlock();
+	int readers = 0;
+	int writers = 0;
+	int writeRequests = 0;
+
+	public synchronized void beginRead() throws InterruptedException {
+
+		while(writers > 0 || writeRequests > 0) {
+			wait();
 		}
+		readers++;
+		notifyAll();
 	}
 	
-	public synchronized void endRead() {
-		lock.lock();
-		try {
-			readerList.remove(0);
-			numThread--;
+	public synchronized void endRead() throws InterruptedException {
 
-			if(readerList.isEmpty()) {
-				readerExists.signalAll();		// check this line?
-			}
-		} finally {
-			lock.unlock();
-		}
+		readers--;
+		notifyAll();
 	}
 	
-	public synchronized void beginWrite() {
+	public synchronized void beginWrite() throws InterruptedException {
+
+		writeRequests++;
+		while(writers > 0 || writeRequests > 0 || readers > 0) {
+			wait();
+		}
+		writers++;
+		writeRequests--;
+		notifyAll();
 	}
-	public synchronized void endWrite() {
+
+	public synchronized void endWrite() throws InterruptedException {
+
+		writers--;
+		notifyAll();
 	}
 }
 	
