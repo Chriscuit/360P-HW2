@@ -1,21 +1,21 @@
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * Created by christophergill on 2/13/18.
  */
 
 public class LinkedList {
 
-    protected Node start;
-    protected Node end ;
-    public int size ;
-    public int maxSize;
+    protected Node head;
+    public AtomicInteger size;
+    public AtomicInteger maxSize;
 
     /*  Constructor  */
     public LinkedList(int maxSize) {
 
-        this.start = null;
-        this.end = null;
-        this.size = 0;
-        this.maxSize = maxSize;
+        this.head = null;
+        this.size.set(0);
+        this.maxSize.set(maxSize);
     }
 
     public Boolean isFull() {
@@ -28,10 +28,10 @@ public class LinkedList {
     /*  Function to check if list is empty  */
     public boolean isEmpty()
     {
-        return start == null;
+        return head == null;
     }
     /*  Function to get size of list  */
-    public int getSize()
+    public AtomicInteger getSize()
     {
         return size;
     }
@@ -45,43 +45,7 @@ public class LinkedList {
         if(isFull()) return -1;
 
 
-        Node currNode = new Node(name, priority);
-
-        // check if empty
-        if(isEmpty()) {
-
-            start = currNode;
-            end = start;
-            return 0;
-
-        } else if(start.getPriority() > currNode.getPriority()) {
-
-            currNode.setNext(start);
-            start.setPrev(currNode);
-            end = start;
-            start = currNode;
-
-        } else if(end.getPriority() > currNode.getPriority()) {
-
-            currNode.setPrev(end);
-            end.setNext(currNode);
-            end = currNode;
-
-        } else {
-
-            Node viewNode = start;
-
-            while(viewNode.getNext() != null) {
-
-                if(viewNode.getNext().getPriority() < currNode.getPriority()){
-
-                    viewNode = viewNode.getNext();
-                } else {
-
-
-                }
-            }
-        }
+        // insert concurrency here
 
 
         return 1;

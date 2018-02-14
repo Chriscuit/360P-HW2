@@ -6,23 +6,19 @@ public class Node
     protected String name;
     protected int priority;
     protected Node next;
-    protected Node prev;
+//    protected Node prev;
 
 
     /*  Constructor  */
     public Node(String name, int priority)
     {
         next = null;
-        prev = null;
+//        prev = null;
         this.name = name;
         this.priority = priority;
     }
 
-    /*  Function to set link to next Node  */
-    public void setPrev(Node n)
-    {
-        this.prev = n;
-    }
+
     /*  Function to set link to next Node  */
     public void setNext(Node n)
     {
@@ -49,11 +45,7 @@ public class Node
     {
         return this.next;
     }
-    /*  Function to get link to next node  */
-    public Node getPrev()
-    {
-        return this.prev;
-    }
+
     /*  Function to get data from current Node  */
     public String getName()
     {
