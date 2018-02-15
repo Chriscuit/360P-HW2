@@ -26,6 +26,7 @@ public class LinkedListTester implements Runnable{
         Thread t3 = new Thread(new LinkedListTester(y));
         Thread t4 = new Thread(new LinkedListTester(m));
         Thread t5 = new Thread(new LinkedListTester(d));
+        System.out.println("testing");
         t1.start();
         t2.start();
         t3.start();

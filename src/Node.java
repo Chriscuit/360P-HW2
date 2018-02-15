@@ -47,6 +47,10 @@ public class Node {
         return this.next;
     }
 
+    public boolean hasNext() {
+        return (!(this.next == null));
+    }
+
     /*  Function to get data from current Node  */
     public String getName()
     {

@@ -3,8 +3,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class LinkedList {
 
     protected Node head;
-    public AtomicInteger size;
-    public AtomicInteger maxSize;
+    public AtomicInteger size = new AtomicInteger();
+    public AtomicInteger maxSize = new AtomicInteger();
 
     /*  Constructor  */
     public LinkedList(int maxSize) {
@@ -22,7 +22,7 @@ public class LinkedList {
         else return false;
     }
     /*  Function to check if list is empty  */
-    public boolean isEmpty()
+    public synchronized boolean isEmpty()
     {
         return head == null;
     }
@@ -38,20 +38,29 @@ public class LinkedList {
         // check if full
         if(isFull()) wait();
         Node newNode = new Node(name, priority);
-        if(isEmpty())
+        if(isEmpty() || priority > head.getPriority())
         {
-            this.head = newNode;
+            newNode.setNext(head);
+            head = newNode;
+            size.getAndIncrement();
             return 0;
         }
-        else
-        {
+        else if(size.get() == 1) {
+            head.lock();
+            head.setNext(newNode);
+            head.unlock();
+            newNode.setNext(null);
+            size.getAndIncrement();
+            return 1;
+        }
+        else {
             head.lock();
             AtomicInteger positionCount = new AtomicInteger();
-            positionCount.set(0);
+            positionCount.set(1);
             Node prev = head;
             Node curr = head.getNext();
             curr.lock();
-            while(curr.getPriority() > priority){
+            while(curr.getPriority() > priority && curr.hasNext()){
                 prev.unlock();
                 prev = curr;
                 curr = curr.getNext();
@@ -61,12 +70,23 @@ public class LinkedList {
             if(curr.getPriority() == priority) {
                 return -1;
             }
-            newNode.setNext(curr);
-            prev.setNext(newNode);
-            curr.unlock();
-            prev.unlock();
-
-            return positionCount.get();
+            // if putting in between
+            if(curr.hasNext()) {
+                newNode.setNext(curr);
+                prev.setNext(newNode);
+                curr.unlock();
+                prev.unlock();
+                size.getAndIncrement();
+                return positionCount.get();
+            }
+            // if adding to end
+            else {
+                curr.setNext(newNode);
+                newNode.setNext(null);
+                curr.unlock();
+                prev.unlock();
+                return size.getAndIncrement();
+            }
         }
     }
 }
