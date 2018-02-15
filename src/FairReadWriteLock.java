@@ -7,17 +7,13 @@ public class FairReadWriteLock {
 	int writeRequests = 0;
 
 	ArrayList<Boolean> queue = new ArrayList<>();
-    ArrayList<Long> tqueue = new ArrayList<>();
-    int count = 0;
 
     public synchronized void beginRead() throws InterruptedException {
 
         queue.add(true);
-        tqueue.add(Thread.currentThread().getId());
-        while(writers > 0 || writeRequests > 0 || queue.get(0) == false || Thread.currentThread().getId() != tqueue.get(count)) {
+        while(writers > 0 || writeRequests > 0 || queue.get(0) == false) {
 			wait();
         }
-        count++;
         queue.remove(0);
         readers++;
         notifyAll();
@@ -32,11 +28,9 @@ public class FairReadWriteLock {
 	public synchronized void beginWrite() throws InterruptedException {
 
         queue.add(false);
-        tqueue.add(Thread.currentThread().getId());
-        while(writers > 0 || readers > 0 || queue.get(0) == true || Thread.currentThread().getId() != tqueue.get(count)) {
+        while(writers > 0 || readers > 0 || queue.get(0) == true) {
 			wait();
         }
-        count++;
         queue.remove(0);
 		writers++;
         notifyAll();
