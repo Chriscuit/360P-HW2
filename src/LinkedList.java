@@ -1,9 +1,5 @@
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * Created by christophergill on 2/13/18.
- */
-
 public class LinkedList {
 
     protected Node head;
@@ -37,17 +33,40 @@ public class LinkedList {
     }
 
 
-    /* TO DO: Implement insertion that orders placement by priority*/
-
-    public int insert(String name, int priority) {
+    public int insert(String name, int priority) throws InterruptedException {
 
         // check if full
-        if(isFull()) return -1;
+        if(isFull()) wait();
+        Node newNode = new Node(name, priority);
+        if(isEmpty())
+        {
+            this.head = newNode;
+            return 0;
+        }
+        else
+        {
+            head.lock();
+            AtomicInteger positionCount = new AtomicInteger();
+            positionCount.set(0);
+            Node prev = head;
+            Node curr = head.getNext();
+            curr.lock();
+            while(curr.getPriority() > priority){
+                prev.unlock();
+                prev = curr;
+                curr = curr.getNext();
+                curr.lock();
+                positionCount.getAndIncrement();
+            }
+            if(curr.getPriority() == priority) {
+                return -1;
+            }
+            newNode.setNext(curr);
+            prev.setNext(newNode);
+            curr.unlock();
+            prev.unlock();
 
-
-        // insert concurrency here
-
-
-        return 1;
+            return positionCount.get();
+        }
     }
 }

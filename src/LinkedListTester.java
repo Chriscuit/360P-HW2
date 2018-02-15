@@ -1,3 +1,7 @@
+import sun.nio.ch.ThreadPool;
+
+import java.util.concurrent.ThreadPoolExecutor;
+
 public class LinkedListTester implements Runnable{
 
 
@@ -9,7 +13,7 @@ public class LinkedListTester implements Runnable{
 
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
         Node h = new Node("a", 4);
         Node w = new Node("y", 7);
@@ -17,15 +21,29 @@ public class LinkedListTester implements Runnable{
         Node m = new Node("b", 2);
         Node d = new Node("c", 3);
 
-        new Thread((new LinkedListTester(h))).start();
-        new Thread(new LinkedListTester(w)).start();
-        new Thread(new LinkedListTester(y)).start();
-        new Thread(new LinkedListTester(m)).start();
-        new Thread(new LinkedListTester(d)).start();
+        Thread t1 = new Thread((new LinkedListTester(h)));
+        Thread t2 = new Thread(new LinkedListTester(w));
+        Thread t3 = new Thread(new LinkedListTester(y));
+        Thread t4 = new Thread(new LinkedListTester(m));
+        Thread t5 = new Thread(new LinkedListTester(d));
+        t1.start();
+        t2.start();
+        t3.start();
+        t4.start();
+        t5.start();
+
+
+        t1.join();
+        t2.join();
+        t3.join();
+        t4.join();
+        t5.join();
+        int x = queue.search("x");
     }
 
     @Override
     public void run() {
+
         try {
             queue.add(a.getName(), a.getPriority());
         } catch (InterruptedException e) {

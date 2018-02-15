@@ -15,11 +15,6 @@ public class PriorityQueue {
         // This method blocks when the list is full.
 
 		int result = linkedList.insert(name, priority);
-
-		while(linkedList.isFull()){
-			Thread.currentThread().wait();
-		}
-
 		return result;
 	}
 
