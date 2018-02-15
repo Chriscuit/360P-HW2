@@ -32,7 +32,7 @@ public class PriorityQueue {
 			Thread.currentThread().wait();
 		}
 
-		return "";
+		return linkedList.first();
 	}
 }
 

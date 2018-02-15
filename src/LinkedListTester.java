@@ -39,6 +39,8 @@ public class LinkedListTester implements Runnable{
         t4.join();
         t5.join();
         int x = queue.search("y");
+        String name = queue.getFirst();
+        String name2 = queue.getFirst();
     }
 
     @Override

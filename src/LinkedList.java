@@ -130,4 +130,21 @@ public class LinkedList {
             }
         }
     }
+
+    public String first() {
+        if (size.get() == 1) {
+            head.lock();
+            String result = head.getName();
+            head = null;
+            return result;
+
+        }
+        head.lock();
+        head.getNext().lock();
+        String result = head.getName();
+        head = head.getNext();
+        head.unlock();
+        size.getAndDecrement();
+        return result;
+    }
 }
