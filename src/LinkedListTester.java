@@ -18,7 +18,7 @@ public class LinkedListTester implements Runnable{
         Node h = new Node("a", 7);
         Node w = new Node("x", 8);
         Node y = new Node("x", 3);
-        Node m = new Node("z", 9);
+        Node m = new Node("m", 9);
         Node d = new Node("c", 2);
         Node p = new Node("p", 4);
         Node z = new Node("b", 5);

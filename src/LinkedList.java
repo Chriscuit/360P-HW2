@@ -96,7 +96,7 @@ public class LinkedList {
                 return -1;
             }
             // if putting in between
-            if(curr.hasNext()) {
+            if(curr.hasNext() || curr.getPriority() < priority) {
                 newNode.setNext(curr);
                 prev.setNext(newNode);
                 curr.unlock();
