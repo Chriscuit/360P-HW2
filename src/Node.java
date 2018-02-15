@@ -1,11 +1,16 @@
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  * Created by christophergill on 2/14/18.
  */
 public class Node
 {
-    protected String name;
-    protected int priority;
-    protected Node next;
+    private String name;
+    private int priority;
+    private Node next;
+    Lock lock;
+
 //    protected Node prev;
 
 
@@ -13,9 +18,9 @@ public class Node
     public Node(String name, int priority)
     {
         next = null;
-//        prev = null;
         this.name = name;
         this.priority = priority;
+        this.lock = new ReentrantLock();
     }
 
 
