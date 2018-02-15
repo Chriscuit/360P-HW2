@@ -4,14 +4,13 @@ public class FairReadWriteLock {
 
 	int readers = 0;
 	int writers = 0;
-	int writeRequests = 0;
 
 	ArrayList<Boolean> queue = new ArrayList<>();
 
     public synchronized void beginRead() throws InterruptedException {
 
         queue.add(true);
-        while(writers > 0 || writeRequests > 0 || queue.get(0) == false) {
+        while(writers > 0 || queue.get(0) == false) {
 			wait();
         }
         queue.remove(0);
