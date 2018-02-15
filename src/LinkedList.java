@@ -1,10 +1,15 @@
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class LinkedList {
 
     protected Node head;
     public AtomicInteger size = new AtomicInteger();
     public AtomicInteger maxSize = new AtomicInteger();
+    private ReentrantLock csLock = new ReentrantLock();
+    private Condition isFull = csLock.newCondition();
+    private Condition isEmpty = csLock.newCondition();
 
     /*  Constructor  */
     public LinkedList(int maxSize) {
@@ -15,44 +20,61 @@ public class LinkedList {
     }
 
     public Boolean isFull() {
-
+        csLock.lock();
         if(this.size == maxSize) {
+            csLock.unlock();
             return true;
         }
-        else return false;
+        else {
+            csLock.unlock();
+            return false;
+        }
     }
     /*  Function to check if list is empty  */
-    public synchronized boolean isEmpty()
-    {
-        return head == null;
-    }
-    /*  Function to get size of list  */
-    public AtomicInteger getSize()
-    {
-        return size;
+    public boolean isEmpty() {
+        csLock.lock();
+        if (head == null)
+        {
+            csLock.unlock();
+            return true;
+        }
+        csLock.unlock();
+        return false;
     }
 
 
     public int insert(String name, int priority) throws InterruptedException {
         // check if full
-        if(isFull()) wait();
+        if(isFull()){
+            csLock.lock();
+            isFull.await();
+            csLock.unlock();
+        }
         Node newNode = new Node(name, priority);
         if(isEmpty() || priority > head.getPriority())
         {
             newNode.setNext(head);
             head = newNode;
             size.getAndIncrement();
+            csLock.lock();
+            isEmpty.signal();
+            csLock.unlock();
             return 0;
         }
         else if (head.getName().equals(name)){
             return -1;
         }
         else if(size.get() == 1) {
-            if(head.getName().equals(name)) return -1;
             head.lock();
+            if(head.getName().equals(name)) {
+                head.unlock();
+                return -1;
+            }
             head.setNext(newNode);
-            head.unlock();
+            newNode.lock();
             newNode.setNext(null);
+            head.unlock();
+            newNode.unlock();
             size.getAndIncrement();
             return 1;
         }
@@ -131,10 +153,17 @@ public class LinkedList {
         }
     }
 
-    public String first() {
-        if (size.get() == 1) {
+    public String first() throws InterruptedException {
+        if(isEmpty()) {
+            isEmpty.await();
+        }
+        else if(size.get() == 1) {
             head.lock();
             String result = head.getName();
+            csLock.lock();
+            isFull.signal();
+            csLock.unlock();
+            size.getAndDecrement();
             head = null;
             return result;
 
@@ -143,6 +172,9 @@ public class LinkedList {
         head.getNext().lock();
         String result = head.getName();
         head = head.getNext();
+        csLock.lock();
+        isFull.signal();
+        csLock.unlock();
         head.unlock();
         size.getAndDecrement();
         return result;
