@@ -1,5 +1,5 @@
 /*
- * EID's of group members
+ * // sik269 and crg2957
  * 
  */
 
