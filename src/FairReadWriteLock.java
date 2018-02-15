@@ -10,7 +10,7 @@ public class FairReadWriteLock {
     ArrayList<Long> tqueue = new ArrayList<>();
     int count = 0;
 
-    public synchronized void beginRead(int x) throws InterruptedException {
+    public synchronized void beginRead() throws InterruptedException {
 
         queue.add(true);
         tqueue.add(Thread.currentThread().getId());
@@ -29,7 +29,7 @@ public class FairReadWriteLock {
 		notifyAll();
 	}
 	
-	public synchronized void beginWrite(int x) throws InterruptedException {
+	public synchronized void beginWrite() throws InterruptedException {
 
         queue.add(false);
         tqueue.add(Thread.currentThread().getId());
