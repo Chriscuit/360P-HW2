@@ -3,8 +3,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class LinkedList {
 
     protected Node head;
-    public AtomicInteger size;
-    public AtomicInteger maxSize;
+    public AtomicInteger size = new AtomicInteger();
+    public AtomicInteger maxSize = new AtomicInteger();
 
     /*  Constructor  */
     public LinkedList(int maxSize) {
