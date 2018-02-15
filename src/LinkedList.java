@@ -93,7 +93,12 @@ public class LinkedList {
         if(isEmpty()) {
             return -1;
         }
-        else if(size.get() == 1 && head.getName().equals(name)) {
+        else if(size.get() == 1) {
+            if(head.getName().equals(name))
+                return 0;
+            return -1;
+        }
+        else if(head.getName().equals(name)) {
             return 0;
         }
         else {
@@ -103,7 +108,22 @@ public class LinkedList {
             Node prev = head;
             Node curr = head.getNext();
             curr.lock();
+            while(!curr.getName().equals(name) && curr.hasNext()){
+                prev.unlock();
+                prev = curr;
+                curr = curr.getNext();
+                curr.lock();
+                positionCount.getAndIncrement();
+            }
+            if(!curr.getName().equals(name)) return -1;
+            if (curr.hasNext()) {
+                curr.unlock();
+                return positionCount.get();
+            }
+            else {
+                curr.unlock();
+                return size.get() - 1;
+            }
         }
-        return -1;
     }
 }
