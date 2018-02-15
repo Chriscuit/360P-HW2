@@ -166,7 +166,6 @@ public class LinkedList {
             size.getAndDecrement();
             head = null;
             return result;
-
         }
         head.lock();
         head.getNext().lock();
