@@ -16,9 +16,9 @@ public class LinkedListTester implements Runnable{
     public static void main(String[] args) throws InterruptedException {
 
         Node h = new Node("a", 7);
-        Node w = new Node("y", 8);
+        Node w = new Node("x", 8);
         Node y = new Node("x", 3);
-        Node m = new Node("b", 9);
+        Node m = new Node("z", 9);
         Node d = new Node("c", 2);
 
         Thread t1 = new Thread((new LinkedListTester(h)));

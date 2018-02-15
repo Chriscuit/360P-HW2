@@ -44,7 +44,11 @@ public class LinkedList {
             size.getAndIncrement();
             return 0;
         }
+        else if (head.getName().equals(name)){
+            return -1;
+        }
         else if(size.get() == 1) {
+            if(head.getName().equals(name)) return -1;
             head.lock();
             head.setNext(newNode);
             head.unlock();
@@ -66,7 +70,7 @@ public class LinkedList {
                 curr.lock();
                 positionCount.getAndIncrement();
             }
-            if(curr.getName().equals(name)) {
+            if(curr.getName().equals(name) || prev.getName().equals(name)) {
                 return -1;
             }
             // if putting in between
