@@ -21,7 +21,7 @@ public class PriorityQueue {
 	public int search(String name) {
         // Returns the position of the name in the list;
         // otherwise, returns -1 if the name is not found.
-		return 1;
+		return linkedList.search(name);
 	}
 
 	public String getFirst() throws InterruptedException {

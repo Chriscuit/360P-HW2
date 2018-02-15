@@ -15,18 +15,17 @@ public class LinkedListTester implements Runnable{
 
     public static void main(String[] args) throws InterruptedException {
 
-        Node h = new Node("a", 4);
-        Node w = new Node("y", 7);
-        Node y = new Node("x", 6);
-        Node m = new Node("b", 2);
-        Node d = new Node("c", 3);
+        Node h = new Node("a", 7);
+        Node w = new Node("y", 8);
+        Node y = new Node("x", 3);
+        Node m = new Node("b", 9);
+        Node d = new Node("c", 2);
 
         Thread t1 = new Thread((new LinkedListTester(h)));
         Thread t2 = new Thread(new LinkedListTester(w));
         Thread t3 = new Thread(new LinkedListTester(y));
         Thread t4 = new Thread(new LinkedListTester(m));
         Thread t5 = new Thread(new LinkedListTester(d));
-        System.out.println("testing");
         t1.start();
         t2.start();
         t3.start();

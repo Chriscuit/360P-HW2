@@ -34,7 +34,6 @@ public class LinkedList {
 
 
     public int insert(String name, int priority) throws InterruptedException {
-
         // check if full
         if(isFull()) wait();
         Node newNode = new Node(name, priority);
@@ -67,7 +66,7 @@ public class LinkedList {
                 curr.lock();
                 positionCount.getAndIncrement();
             }
-            if(curr.getPriority() == priority) {
+            if(curr.getName().equals(name)) {
                 return -1;
             }
             // if putting in between
@@ -88,5 +87,23 @@ public class LinkedList {
                 return size.getAndIncrement();
             }
         }
+    }
+
+    public int search(String name) {
+        if(isEmpty()) {
+            return -1;
+        }
+        else if(size.get() == 1 && head.getName().equals(name)) {
+            return 0;
+        }
+        else {
+            head.lock();
+            AtomicInteger positionCount = new AtomicInteger();
+            positionCount.set(1);
+            Node prev = head;
+            Node curr = head.getNext();
+            curr.lock();
+        }
+        return -1;
     }
 }
